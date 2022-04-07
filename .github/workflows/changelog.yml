@@ -14,6 +14,6 @@ jobs:
         run: |
           npm install @actions/core
 
-      - name: 'Generate next build number'
+      - name: 'Generate ChangeLog'
         id: changelog
         uses: "./.github/actions/changelog"
