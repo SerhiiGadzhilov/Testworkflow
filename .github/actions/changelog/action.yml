@@ -1,0 +1,10 @@
+name: 'Generate changelog'
+description: 'Generate changelog'
+
+outputs:
+  build-number:
+    description: 'Generated changelog'
+
+runs:
+  using: 'node12'
+  main: 'changelog.js'
