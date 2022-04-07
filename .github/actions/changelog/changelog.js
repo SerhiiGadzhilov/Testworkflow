@@ -37,12 +37,26 @@ function Submodule(config) {
         }
     }
 
+    function setPrevRevision(revisions) {
+        if (revisions && revisions[1]) {
+            _prev_revision = revisions[1].toString();
+        }
+    }
+
+    function setRevision(revisions) {
+        if (revisions && revisions[1]) {
+            _revision = revisions[1].toString();
+        }
+    }
+
     function setRevisions() {
         let result = cp.execSync(`git diff HEAD^..HEAD ${_path}`);
         if (result) {
             const revisions = Array.from(result.toString().matchAll("[-|+]Subproject commit (.*)"));
-            _prev_revision = revisions[0][1].toString();
-            _revision = revisions[1][1].toString();
+            if (revisions) {
+                setPrevRevision(revisions[0]);
+                setRevision(revisions[1]);
+            }
         }
     }
 
@@ -67,7 +81,11 @@ function Submodule(config) {
     }
 
     _self.isChanged = function() {
-        return _revision != _prev_revision; 
+        let result = false;
+        if (_revision && _revision) {
+            result = _revision != _prev_revision;
+        }
+        return result;
     }
 
     _self.getChanges = function() {
