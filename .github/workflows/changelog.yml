@@ -1,19 +1,36 @@
-name: Create Changelog
+name: Test Matrix
 
 on: [workflow_dispatch]
 
 jobs:
   create-release:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - name: "synergy"
+            remote_folder: "v1-core-standard"
+            enterprise: ""
+            business: ""
+          - name: "synergy-enterprise"
+            remote_folder: "v1-core-enterprise"
+            enterprise: "1"
+            business: ""
+          - name: "synergy-business"
+            remote_folder: "v1-core-business"
+            enterprise: ""
+            business: "1"
+    env:
+      SYNERGY_ENTERPRISE: ${{ matrix.enterprise }}
+      SYNERGY_BUSINESS: ${{ matrix.business }}
+
     steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
-      - name: 'Install git core'
+      - name: 'Test matrix'
         run: |
-          npm install @actions/core
-
-      - name: 'Generate ChangeLog'
-        id: changelog
-        uses: "./.github/actions/changelog"
+          echo "------------------"
+          echo $SYNERGY_ENTERPRISE
+          echo $SYNERGY_BUSINESS
+          echo "${{ matrix.name }}"
+          echo "${{ matrix.remote_folder }}"
+          echo "${{ matrix.enterprise }}"
+          echo "${{ matrix.business }}"
